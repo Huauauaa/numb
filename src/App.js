@@ -1,28 +1,45 @@
-import './App.css';
-import { useQuery, gql } from '@apollo/client';
+import './App.css'
+import { useQuery, gql } from '@apollo/client'
+import { useState } from 'react'
 
-const GET_TODOS = gql`
-  query GetAllTodos {
-    todos {
+const GET_WORDS = gql`
+  query GetWords($keywords: Boolean) {
+    filterWords(keywords: $keywords) {
       id
-      text
-      completed
+      abbr
+      words
     }
   }
-`;
+`
 
 function App() {
-  const { loading, error, data } = useQuery(GET_TODOS);
+  console.log('app')
+  const [checked, setChecked] = useState(false)
+  const {
+    loading,
+    error,
+    data = { filterWords: [] },
+  } = useQuery(GET_WORDS, {
+    variables: { keywords: 't' },
+  })
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error : {error.message}</p>
 
-  return data.todos.map(({ id, text, completed }) => (
-    <div key={id}>
-      <input type="checkbox" defaultChecked={completed} />
-      {text}
-    </div>
-  ));
+  const onChange = (val) => {
+    setChecked(val.target.checked)
+  }
+
+  console.log(data.filterWords)
+
+  return (
+    <>
+      <input type="checkbox" checked={checked} onChange={onChange} />
+      {data.filterWords.map(({ id, words }) => (
+        <div key={id}>{words}</div>
+      ))}
+    </>
+  )
 }
 
-export default App;
+export default App

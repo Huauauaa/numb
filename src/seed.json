@@ -1,0 +1,22 @@
+[
+  {
+    "words": "table data",
+    "abbr": "td"
+  },
+  {
+    "words": "table header",
+    "abbr": "th"
+  },
+  {
+    "words": "order list",
+    "abbr": "ol"
+  },
+  {
+    "words": "unorderList",
+    "abbr": "ul"
+  },
+  {
+    "words": "paragraph",
+    "abbr": "p"
+  }
+]

@@ -1,35 +1,27 @@
-import { InMemoryCache, makeVar } from '@apollo/client';
+import { InMemoryCache, makeVar } from '@apollo/client'
+import { nanoid } from 'nanoid'
+import seeds from './seed.json'
 
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
-      fields: {
-        todos: {
-          read() {
-            return todosVar();
-          },
+      words: {
+        read() {
+          return wordsVar()
         },
-        visibilityFilter: {
-          read() {
-            return visibilityFilterVar();
+      },
+      fields: {
+        filterWords: {
+          read(_, { variables }) {
+            console.log({ variables }, wordsVar())
+            return wordsVar()
           },
         },
       },
     },
   },
-});
+})
 
-const todosInitialValue = [
-  {
-    id: 0,
-    completed: true,
-    text: 'Use Apollo Client 3',
-  },
-];
+const initialWords = seeds.map((item) => ({ ...item, id: nanoid() }))
 
-export const todosVar = makeVar(todosInitialValue);
-
-export const visibilityFilterVar = makeVar({
-  id: 'show_all',
-  displayName: 'All',
-});
+export const wordsVar = makeVar(initialWords)
